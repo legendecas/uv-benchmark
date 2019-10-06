@@ -1,0 +1,31 @@
+tuv:
+	PROJECT_DIR=`pwd`
+	cmake -S deps/libtuv -B out/libtuv -DTARGET_PLATFORM=x86_64-darwin -DCMAKE_BUILD_TYPE=release
+	make -C out/libtuv
+	make -C out/libtuv DESTDIR=${PROJECT_DIR}/out install
+
+uv:
+	PROJECT_DIR=`pwd`
+	cmake -S deps/libuv -B out/libuv
+	make -C out/libuv
+	make -C out/libuv DESTDIR=${PROJECT_DIR}/out install
+
+uv-demo:
+	set -x
+	if test ${UV} = 'uv'; then
+		INCLUDE_PATH=out/usr/local/include
+		LINK_PATH=out/usr/local/lib
+		UV=uv_a
+	else
+		INCLUDE_PATH=out/usr/include/libtuv
+		LINK_PATH=out/usr/lib
+	fi
+	clang main.c -o out/uv-demo-${UV} -I${INCLUDE_PATH} -L${LINK_PATH} -l${UV}
+
+build-tuv: tuv
+	bake uv-demo UV=tuv
+build-uv: uv 
+	bake uv-demo UV=uv
+
+clean:
+	rm -rf out

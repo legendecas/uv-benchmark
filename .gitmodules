@@ -1,0 +1,6 @@
+[submodule "deps/libtuv"]
+	path = deps/libtuv
+	url = git@github.com:Samsung/libtuv.git
+[submodule "deps/libuv"]
+	path = deps/libuv
+	url = git@github.com:libuv/libuv.git
